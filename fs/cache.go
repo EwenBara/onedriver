@@ -182,6 +182,7 @@ func (f *Filesystem) createTrash(auth *graph.Auth) error {
 // and TODO spawns delta threads for shared folders
 func (f *Filesystem) createSharedItems(auth *graph.Auth) error {
 	sharedFolder := NewInode("Shared with me", 0555|fuse.S_IFDIR, nil)
+	sharedFolder.SetImmutable()
 	const sharedID = "shared"
 	sharedFolder.DriveItem.ID = sharedID
 	f.InsertChild(f.root, sharedFolder)
@@ -193,7 +194,7 @@ func (f *Filesystem) createSharedItems(auth *graph.Auth) error {
 		f.InsertChild(sharedID, NewInodeDriveItem(child))
 	}
 	log.Info().
-		Int("numberShared", len(children)).
+		Int("number", len(children)).
 		Msg("Successfully fetched shared items.")
 	return nil
 }
